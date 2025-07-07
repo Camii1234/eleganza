@@ -55,6 +55,18 @@
                                         <i class="bi bi-person-circle fs-1 text-primary"></i>
                                         <p class="text-muted">Accede a tu cuenta de Boutique Eleganza</p>
                                     </div>
+                                    
+                                    <!-- Mostrar mensaje de registro exitoso -->
+                                    <% 
+                                    String registro = request.getParameter("registro");
+                                    if ("exitoso".equals(registro)) { 
+                                    %>
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-check-circle"></i> ¡Registro exitoso! Ya puedes iniciar sesión con tu cuenta.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    <% } %>
+                                    
                                     <form>
                                         <div class="form-floating mb-3">
                                             <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" required>

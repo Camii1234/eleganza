@@ -1,4 +1,31 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.camila.eleganza.dao.ProductoDAO"%>
+<%@page import="com.camila.eleganza.model.Producto"%>
+<%@page import="java.util.Base64"%>
+
+<%
+    String idStr = request.getParameter("id");
+    if (idStr == null || idStr.trim().isEmpty()) {
+        response.sendRedirect("admin.jsp?mensaje=error&texto=ID de producto no válido");
+        return;
+    }
+    
+    int productoId = Integer.parseInt(idStr);
+    ProductoDAO productoDAO = new ProductoDAO();
+    Producto producto = productoDAO.getProductoById(productoId);
+    
+    if (producto == null) {
+        response.sendRedirect("admin.jsp?mensaje=error&texto=Producto no encontrado");
+        return;
+    }
+    
+    // Preparar la imagen para mostrar
+    String imagenSrc = "https://dummyimage.com/200x200/ced4da/6c757d?text=Sin+Imagen";
+    if (producto.getImagen() != null && producto.getImagen().length > 0) {
+        String imagenBase64 = Base64.getEncoder().encodeToString(producto.getImagen());
+        imagenSrc = "data:image/jpeg;base64," + imagenBase64;
+    }
+%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -49,7 +76,7 @@
                         <div class="col-lg-8 col-xxl-6">
                             <div class="text-center my-5">
                                 <h1 class="fw-bolder mb-3">Editar Producto</h1>
-                                <p class="lead fw-normal text-muted mb-4">Modifica la información del producto</p>
+                                <p class="lead fw-normal text-muted mb-4">Modifica la información de: <%= producto.getNombre() %></p>
                             </div>
                         </div>
                     </div>
@@ -61,17 +88,18 @@
                                     <h5 class="text-white mb-0">Información del Producto</h5>
                                 </div>
                                 <div class="card-body p-5">
-                                    <form>
+                                    <form action="EditarProductoServlet" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" name="id" value="<%= producto.getIdProducto() %>">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="nombre" class="form-label">Nombre del Producto *</label>
-                                                <input type="text" class="form-control" id="nombre" name="nombre" value="Vestido Elegante" required>
+                                                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= producto.getNombre() %>" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="precio" class="form-label">Precio *</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">$</span>
-                                                    <input type="number" class="form-control" id="precio" name="precio" value="150000" required>
+                                                    <input type="number" class="form-control" id="precio" name="precio" value="<%= producto.getPrecio() %>" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,67 +108,55 @@
                                                 <label for="categoria" class="form-label">Categoría *</label>
                                                 <select class="form-select" id="categoria" name="categoria" required>
                                                     <option value="">Seleccionar categoría</option>
-                                                    <option value="vestidos" selected>Vestidos</option>
-                                                    <option value="blusas">Blusas</option>
-                                                    <option value="pantalones">Pantalones</option>
-                                                    <option value="faldas">Faldas</option>
-                                                    <option value="chaquetas">Chaquetas</option>
-                                                    <option value="accesorios">Accesorios</option>
-                                                    <option value="calzado">Calzado</option>
-                                                    <option value="ropa-interior">Ropa Interior</option>
+                                                    <option value="vestidos" <%= "vestidos".equals(producto.getCategoria()) ? "selected" : "" %>>Vestidos</option>
+                                                    <option value="blusas" <%= "blusas".equals(producto.getCategoria()) ? "selected" : "" %>>Blusas</option>
+                                                    <option value="pantalones" <%= "pantalones".equals(producto.getCategoria()) ? "selected" : "" %>>Pantalones</option>
+                                                    <option value="faldas" <%= "faldas".equals(producto.getCategoria()) ? "selected" : "" %>>Faldas</option>
+                                                    <option value="chaquetas" <%= "chaquetas".equals(producto.getCategoria()) ? "selected" : "" %>>Chaquetas</option>
+                                                    <option value="accesorios" <%= "accesorios".equals(producto.getCategoria()) ? "selected" : "" %>>Accesorios</option>
+                                                    <option value="calzado" <%= "calzado".equals(producto.getCategoria()) ? "selected" : "" %>>Calzado</option>
+                                                    <option value="ropa-interior" <%= "ropa-interior".equals(producto.getCategoria()) ? "selected" : "" %>>Ropa Interior</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="stock" class="form-label">Stock Disponible *</label>
-                                                <input type="number" class="form-control" id="stock" name="stock" min="0" value="15" required>
+                                                <input type="number" class="form-control" id="stock" name="stock" min="0" value="<%= producto.getStock() %>" required>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <label for="tallas" class="form-label">Tallas Disponibles *</label>
-                                                <div class="form-check-group">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="tallaXS" value="XS">
-                                                        <label class="form-check-label" for="tallaXS">XS</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="tallaS" value="S" checked>
-                                                        <label class="form-check-label" for="tallaS">S</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="tallaM" value="M" checked>
-                                                        <label class="form-check-label" for="tallaM">M</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="tallaL" value="L" checked>
-                                                        <label class="form-check-label" for="tallaL">L</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox" id="tallaXL" value="XL">
-                                                        <label class="form-check-label" for="tallaXL">XL</label>
-                                                    </div>
-                                                </div>
+                                                <label for="talla" class="form-label">Talla *</label>
+                                                <select class="form-select" id="talla" name="talla" required>
+                                                    <option value="">Seleccionar talla</option>
+                                                    <option value="XS" <%= "XS".equals(producto.getTalla()) ? "selected" : "" %>>XS</option>
+                                                    <option value="S" <%= "S".equals(producto.getTalla()) ? "selected" : "" %>>S</option>
+                                                    <option value="M" <%= "M".equals(producto.getTalla()) ? "selected" : "" %>>M</option>
+                                                    <option value="L" <%= "L".equals(producto.getTalla()) ? "selected" : "" %>>L</option>
+                                                    <option value="XL" <%= "XL".equals(producto.getTalla()) ? "selected" : "" %>>XL</option>
+                                                    <option value="XXL" <%= "XXL".equals(producto.getTalla()) ? "selected" : "" %>>XXL</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="estado" class="form-label">Estado *</label>
                                                 <select class="form-select" id="estado" name="estado" required>
-                                                    <option value="activo" selected>Activo</option>
-                                                    <option value="inactivo">Inactivo</option>
+                                                    <option value="">Seleccionar estado</option>
+                                                    <option value="Activo" <%= "Activo".equals(producto.getEstado()) ? "selected" : "" %>>Activo</option>
+                                                    <option value="Inactivo" <%= "Inactivo".equals(producto.getEstado()) ? "selected" : "" %>>Inactivo</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="imagen-actual" class="form-label">Imagen Actual</label>
                                             <div class="mb-2">
-                                                <img src="https://dummyimage.com/200x200/ced4da/6c757d?text=Vestido+Elegante" alt="Producto actual" class="img-thumbnail">
+                                                <img src="<%= imagenSrc %>" alt="<%= producto.getNombre() %>" class="img-thumbnail" style="max-width: 200px; height: auto;">
                                             </div>
                                             <label for="imagen" class="form-label">Cambiar Imagen</label>
                                             <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
-                                            <div class="form-text">Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB</div>
+                                            <div class="form-text">Formatos aceptados: JPG, PNG, GIF. Tamaño máximo: 5MB (dejar vacío para mantener imagen actual)</div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="descripcion" class="form-label">Descripción</label>
-                                            <textarea class="form-control" id="descripcion" name="descripcion" rows="4" placeholder="Descripción detallada del producto...">Elegante vestido perfecto para ocasiones especiales. Confeccionado en tela de alta calidad con un diseño moderno y sofisticado.</textarea>
+                                            <textarea class="form-control" id="descripcion" name="descripcion" rows="4" placeholder="Descripción detallada del producto..."><%= producto.getDescripcion() != null ? producto.getDescripcion() : "" %></textarea>
                                         </div>
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                             <a href="admin.jsp" class="btn btn-secondary me-md-2">Cancelar</a>

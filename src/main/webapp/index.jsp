@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="https://dummyimage.com/600x400/343a40/6c757d?text=Boutique+Medellin" alt="Boutique Eleganza" /></div>
+                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="img/inicio.jpg" alt="Boutique Eleganza" /></div>
                     </div>
                 </div>
             </header>
@@ -112,82 +112,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Blog preview section-->
-            <section class="py-5">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-lg-8 col-xl-6">
-                            <div class="text-center">
-                                <h2 class="fw-bolder">Tendencias y Estilo</h2>
-                                <p class="lead fw-normal text-muted mb-5">Mantente al día con las últimas tendencias de moda y consejos de estilo de nuestros expertos.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gx-5">
-                        <div class="col-lg-4 mb-5">
-                            <div class="card h-100 shadow border-0">
-                                <img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d?text=Tendencias+Otoño" alt="Tendencias Otoño" />
-                                <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">Tendencias</div>
-                                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">Las 5 tendencias de otoño que debes conocer</h5></a>
-                                    <p class="card-text mb-0">Descubre los colores, texturas y estilos que marcarán la temporada otoñal y cómo incorporarlos a tu guardarropa.</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d?text=AS" alt="Asesora" />
-                                            <div class="small">
-                                                <div class="fw-bold">Ana Sofía Restrepo</div>
-                                                <div class="text-muted">15 de Octubre, 2024 &middot; 5 min lectura</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-5">
-                            <div class="card h-100 shadow border-0">
-                                <img class="card-img-top" src="https://dummyimage.com/600x350/adb5bd/495057?text=Looks+Oficina" alt="Looks de Oficina" />
-                                <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">Estilo</div>
-                                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">Cómo crear looks perfectos para la oficina</h5></a>
-                                    <p class="card-text mb-0">Combina elegancia y comodidad con nuestros consejos para lucir profesional y sofisticada en el trabajo.</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d?text=LM" alt="Asesora" />
-                                            <div class="small">
-                                                <div class="fw-bold">Laura Morales</div>
-                                                <div class="text-muted">12 de Octubre, 2024 &middot; 7 min lectura</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-5">
-                            <div class="card h-100 shadow border-0">
-                                <img class="card-img-top" src="https://dummyimage.com/600x350/6c757d/343a40?text=Cuidado+Ropa" alt="Cuidado de la Ropa" />
-                                <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">Consejos</div>
-                                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">Secretos para mantener tu ropa como nueva por más tiempo</h5></a>
-                                    <p class="card-text mb-0">Aprende las técnicas profesionales de cuidado textil que prolongarán la vida útil de tus prendas favoritas.</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d?text=CM" alt="Experta" />
-                                            <div class="small">
-                                                <div class="fw-bold">Catalina Mendoza</div>
-                                                <div class="text-muted">8 de Octubre, 2024 &middot; 6 min lectura</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Call to action-->
                     <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
                         <div class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">

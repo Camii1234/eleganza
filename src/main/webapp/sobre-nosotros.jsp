@@ -58,7 +58,7 @@
             <section class="py-5 bg-light">
                 <div class="container px-5 my-5">
                     <div class="row gx-5 align-items-center">
-                        <div class="col-lg-6"><img class="img-fluid rounded mb-5 mb-lg-0" src="https://dummyimage.com/600x400/ced4da/6c757d?text=Boutique+Medellin" alt="Boutique Eleganza" /></div>
+                        <div class="col-lg-6"><img class="img-fluid rounded mb-5 mb-lg-0" src="img/sobrenosotros1.jpg" alt="Boutique Eleganza" /></div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">Nuestra Historia</h2>
                             <p class="lead fw-normal text-muted mb-0">Boutique Eleganza nació en 2015 en el corazón de El Poblado, con la visión de ofrecer a las mujeres de Medellín y Antioquia moda exclusiva y de alta calidad. Fundada por un equipo apasionado por el diseño y la elegancia, nuestra boutique se ha convertido en un referente de estilo en la ciudad.</p>
@@ -70,7 +70,7 @@
             <section class="py-5">
                 <div class="container px-5 my-5">
                     <div class="row gx-5 align-items-center">
-                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="https://dummyimage.com/600x400/ced4da/6c757d?text=Mision+Vision" alt="Misión y Visión" /></div>
+                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="img/sobrenosotros2.jpg" alt="Misión y Visión" /></div>
                         <div class="col-lg-6">
                             <h2 class="fw-bolder">Nuestra Misión</h2>
                             <p class="lead fw-normal text-muted mb-4">Empoderar a las mujeres a través de la moda, ofreciendo prendas únicas que reflejen su personalidad y estilo. Creemos que cada mujer merece sentirse hermosa, segura y auténtica.</p>
@@ -122,28 +122,21 @@
                     <div class="row gx-5 row-cols-1 row-cols-sm-2 row-cols-xl-4 justify-content-center">
                         <div class="col mb-5 mb-xl-0">
                             <div class="text-center">
-                                <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/250x250/ced4da/6c757d?text=Maria+Rodriguez" alt="María Rodríguez" />
-                                <h5 class="fw-bolder">María Rodríguez</h5>
-                                <div class="fst-italic text-muted">Fundadora & Directora Creativa</div>
-                            </div>
-                        </div>
-                        <div class="col mb-5 mb-xl-0">
-                            <div class="text-center">
-                                <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/250x250/ced4da/6c757d?text=Ana+Lopez" alt="Ana López" />
+                                <img class="img-fluid rounded-circle mb-4" src="img/sobrenosotros4.jpg" alt="Ana López" style="width: 200px; height: 200px; object-fit: cover;" />
                                 <h5 class="fw-bolder">Ana López</h5>
                                 <div class="fst-italic text-muted">Asesora de Moda</div>
                             </div>
                         </div>
                         <div class="col mb-5 mb-sm-0">
                             <div class="text-center">
-                                <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/250x250/ced4da/6c757d?text=Carmen+Silva" alt="Carmen Silva" />
+                                <img class="img-fluid rounded-circle mb-4" src="img/sobrenosotros5.jpg" alt="Carmen Silva" style="width: 200px; height: 200px; object-fit: cover;" />
                                 <h5 class="fw-bolder">Carmen Silva</h5>
                                 <div class="fst-italic text-muted">Gerente de Ventas</div>
                             </div>
                         </div>
                         <div class="col mb-5">
                             <div class="text-center">
-                                <img class="img-fluid rounded-circle mb-4 px-4" src="https://dummyimage.com/250x250/ced4da/6c757d?text=Laura+Gomez" alt="Laura Gómez" />
+                                <img class="img-fluid rounded-circle mb-4" src="img/sobrenosotros7.jpg" alt="Laura Gómez" style="width: 200px; height: 200px; object-fit: cover;" />
                                 <h5 class="fw-bolder">Laura Gómez</h5>
                                 <div class="fst-italic text-muted">Coordinadora de Compras</div>
                             </div>

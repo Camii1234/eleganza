@@ -18,6 +18,9 @@
     
     DecimalFormat formatter = new DecimalFormat("#,###");
     SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+    
+    // Obtener el contexto de la aplicación
+    String contextPath = request.getContextPath();
 %>
 
 <!DOCTYPE html>
@@ -78,12 +81,36 @@
                     <!-- Mensaje de éxito -->
                     <%
                         String mensaje = request.getParameter("mensaje");
+                        String texto = request.getParameter("texto");
+                        
                         if (mensaje != null && "producto_agregado".equals(mensaje)) {
                     %>
                     <div class="row justify-content-center mb-4">
                         <div class="col-lg-8">
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <i class="bi bi-check-circle"></i> ¡Producto agregado exitosamente!
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <%
+                        } else if (mensaje != null && "success".equals(mensaje) && texto != null) {
+                    %>
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-lg-8">
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle"></i> <%= texto %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <%
+                        } else if (mensaje != null && "error".equals(mensaje) && texto != null) {
+                    %>
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-lg-8">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle"></i> <%= texto %>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
@@ -301,12 +328,7 @@
                                                     <td><%= usuario.getCiudad() != null ? usuario.getCiudad() : "No especificado" %></td>
                                                     <td><%= usuario.getPais() != null ? usuario.getPais() : "No especificado" %></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-info" title="Ver detalles" onclick="verDetalleUsuario('<%= usuario.getIdUsuario() %>')">
-                                                            <i class="bi bi-eye"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-outline-primary" title="Editar usuario" onclick="editarUsuario('<%= usuario.getIdUsuario() %>')">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </button>
+                                                        
                                                         <button class="btn btn-sm btn-outline-danger" title="Eliminar usuario" onclick="eliminarUsuario('<%= usuario.getIdUsuario() %>')">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
@@ -489,9 +511,75 @@
         
         <script>
             function eliminarProducto(id) {
-                if (confirm('¿Está seguro de que desea eliminar este producto?')) {
-                    window.location.href = 'EliminarProductoServlet?id=' + id;
+                console.log('=== INICIO eliminarProducto ===');
+                console.log('ID del producto:', id);
+                
+                if (confirm('¿Está seguro de que desea eliminar este producto?\n\nEsta acción no se puede deshacer y el producto será eliminado permanentemente de la base de datos.')) {
+                    // Mostrar mensaje de carga
+                    const overlay = document.createElement('div');
+                    overlay.innerHTML = '<div class="d-flex justify-content-center align-items-center h-100"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Eliminando...</span></div></div>';
+                    overlay.className = 'position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex justify-content-center align-items-center';
+                    overlay.style.zIndex = '9999';
+                    document.body.appendChild(overlay);
+                    
+                    // Construir URL
+                    const contextPath = '<%= contextPath %>';
+                    const url = contextPath + '/EliminarProductoServlet?id=' + encodeURIComponent(id);
+                    console.log('Context path:', contextPath);
+                    console.log('URL completa:', url);
+                    
+                    // Hacer petición AJAX
+                    console.log('Enviando petición fetch...');
+                    fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        console.log('Respuesta recibida - Status:', response.status);
+                        console.log('Headers:', response.headers);
+                        console.log('OK:', response.ok);
+                        
+                        if (!response.ok) {
+                            throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                        }
+                        
+                        return response.text(); // Primero obtener como texto para debug
+                    })
+                    .then(text => {
+                        console.log('Texto de respuesta:', text);
+                        
+                        // Intentar parsear como JSON
+                        try {
+                            const data = JSON.parse(text);
+                            console.log('JSON parseado:', data);
+                            document.body.removeChild(overlay);
+                            
+                            if (data.success) {
+                                alert('Producto eliminado exitosamente');
+                                window.location.reload(); // Recargar la página para actualizar la lista
+                            } else {
+                                alert('Error al eliminar producto: ' + data.message);
+                            }
+                        } catch (jsonError) {
+                            console.error('Error al parsear JSON:', jsonError);
+                            document.body.removeChild(overlay);
+                            alert('Error: Respuesta no válida del servidor');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error en fetch:', error);
+                        console.error('Tipo de error:', typeof error);
+                        console.error('Mensaje:', error.message);
+                        document.body.removeChild(overlay);
+                        alert('Error de conexión al eliminar producto: ' + error.message);
+                    });
+                } else {
+                    console.log('Eliminación cancelada por el usuario');
                 }
+                console.log('=== FIN eliminarProducto ===');
             }
             
             function verDetalleUsuario(id) {
@@ -506,29 +594,75 @@
             }
             
             function eliminarUsuario(id) {
-                if (confirm('¿Está seguro de que desea eliminar este usuario?\nEsta acción no se puede deshacer.')) {
-                    // Hacer petición AJAX para eliminar usuario
-                    fetch('admin/usuarios', {
-                        method: 'POST',
+                console.log('=== INICIO eliminarUsuario ===');
+                console.log('ID del usuario:', id);
+                
+                if (confirm('¿Está seguro de que desea eliminar este usuario?\n\nEsta acción no se puede deshacer y el usuario será eliminado permanentemente de la base de datos.')) {
+                    // Mostrar mensaje de carga
+                    const overlay = document.createElement('div');
+                    overlay.innerHTML = '<div class="d-flex justify-content-center align-items-center h-100"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Eliminando...</span></div></div>';
+                    overlay.className = 'position-fixed top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex justify-content-center align-items-center';
+                    overlay.style.zIndex = '9999';
+                    document.body.appendChild(overlay);
+                    
+                    // Construir URL
+                    const contextPath = '<%= contextPath %>';
+                    const url = contextPath + '/EliminarUsuarioServlet?id=' + encodeURIComponent(id);
+                    console.log('Context path:', contextPath);
+                    console.log('URL completa:', url);
+                    
+                    // Hacer petición AJAX
+                    console.log('Enviando petición fetch...');
+                    fetch(url, {
+                        method: 'GET',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: 'action=delete&idUsuario=' + id
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Usuario eliminado exitosamente');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + data.error);
+                    .then(response => {
+                        console.log('Respuesta recibida - Status:', response.status);
+                        console.log('Headers:', response.headers);
+                        console.log('OK:', response.ok);
+                        
+                        if (!response.ok) {
+                            throw new Error('HTTP ' + response.status + ': ' + response.statusText);
+                        }
+                        
+                        return response.text(); // Primero obtener como texto para debug
+                    })
+                    .then(text => {
+                        console.log('Texto de respuesta:', text);
+                        
+                        // Intentar parsear como JSON
+                        try {
+                            const data = JSON.parse(text);
+                            console.log('JSON parseado:', data);
+                            document.body.removeChild(overlay);
+                            
+                            if (data.success) {
+                                alert('Usuario eliminado exitosamente');
+                                window.location.reload(); // Recargar la página para actualizar la lista
+                            } else {
+                                alert('Error al eliminar usuario: ' + data.message);
+                            }
+                        } catch (jsonError) {
+                            console.error('Error al parsear JSON:', jsonError);
+                            document.body.removeChild(overlay);
+                            alert('Error: Respuesta no válida del servidor');
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error al eliminar usuario');
+                        console.error('Error en fetch:', error);
+                        console.error('Tipo de error:', typeof error);
+                        console.error('Mensaje:', error.message);
+                        document.body.removeChild(overlay);
+                        alert('Error de conexión al eliminar usuario: ' + error.message);
                     });
+                } else {
+                    console.log('Eliminación cancelada por el usuario');
                 }
+                console.log('=== FIN eliminarUsuario ===');
             }
             
             // Funcionalidad de búsqueda de usuarios

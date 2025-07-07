@@ -104,8 +104,14 @@
                                         case "error_base_datos":
                                             out.print("Error al guardar en la base de datos.");
                                             break;
+                                        case "stock_invalido":
+                                            out.print("El stock no puede ser negativo.");
+                                            break;
                                         case "tallas_requeridas":
                                             out.print("Debe seleccionar al menos una talla.");
+                                            break;
+                                        case "error_interno":
+                                            out.print("Error interno del servidor. Intente nuevamente.");
                                             break;
                                         default:
                                             out.print("Ha ocurrido un error. Por favor intente nuevamente.");
@@ -139,7 +145,7 @@
                                     <h5 class="text-white mb-0">Información del Producto</h5>
                                 </div>
                                 <div class="card-body p-5">
-                                    <form method="post" action="procesar-producto.jsp" enctype="multipart/form-data" id="formProducto">
+                                    <form method="post" action="admin/nuevoProducto" enctype="multipart/form-data" id="formProducto">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="nombre" class="form-label">Nombre del Producto *</label>
@@ -175,31 +181,9 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <label class="form-label">Tallas Disponibles</label>
-                                                <input type="hidden" id="tallasSeleccionadas" name="talla">
-                                                <div class="form-check-group">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input talla-checkbox" type="checkbox" id="tallaXS" value="XS">
-                                                        <label class="form-check-label" for="tallaXS">XS</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input talla-checkbox" type="checkbox" id="tallaS" value="S">
-                                                        <label class="form-check-label" for="tallaS">S</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input talla-checkbox" type="checkbox" id="tallaM" value="M">
-                                                        <label class="form-check-label" for="tallaM">M</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input talla-checkbox" type="checkbox" id="tallaL" value="L">
-                                                        <label class="form-check-label" for="tallaL">L</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input talla-checkbox" type="checkbox" id="tallaXL" value="XL">
-                                                        <label class="form-check-label" for="tallaXL">XL</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-text">Opcional: Si no selecciona ninguna, se usará "Única"</div>
+                                                <label for="talla" class="form-label">Talla</label>
+                                                <input type="text" class="form-control" id="talla" name="talla" placeholder="Ej: S, M, L, XL, 38, 40, Única..." maxlength="50">
+                                                <div class="form-text">Opcional: Si no especifica una talla, se usará "Única"</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="estado" class="form-label">Estado *</label>
@@ -253,24 +237,8 @@
         <script src="js/scripts.js"></script>
         
         <script>
-            // Manejar selección de tallas
+            // Validación del formulario
             document.addEventListener('DOMContentLoaded', function() {
-                const tallasCheckboxes = document.querySelectorAll('.talla-checkbox');
-                const tallasInput = document.getElementById('tallasSeleccionadas');
-                
-                tallasCheckboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', function() {
-                        const tallasSeleccionadas = [];
-                        tallasCheckboxes.forEach(cb => {
-                            if (cb.checked) {
-                                tallasSeleccionadas.push(cb.value);
-                            }
-                        });
-                        tallasInput.value = tallasSeleccionadas.join(',');
-                    });
-                });
-
-                // Validación mínima del formulario
                 document.getElementById('formProducto').addEventListener('submit', function(e) {
                     const nombre = document.getElementById('nombre').value.trim();
                     const precio = document.getElementById('precio').value.trim();
@@ -287,6 +255,8 @@
                         alert('El precio debe ser mayor a 0.');
                         return false;
                     }
+                    
+                    // Si no hay talla especificada, el servlet usará "Única" por defecto
                 });
             });
         </script>

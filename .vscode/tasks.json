@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Eleganza Project",
+			"type": "shell",
+			"command": "./mvnw.cmd",
+			"args": [
+				"clean",
+				"compile"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		}
+	]
+}
