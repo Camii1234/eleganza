@@ -1,4 +1,10 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.camila.eleganza.model.Usuario"%>
+<%@page import="com.camila.eleganza.util.SessionManager"%>
+<%
+    // Obtener usuario de la sesión (ya verificado por el filtro)
+    Usuario usuarioLogueado = SessionManager.getUsuarioSesion(session);
+%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -16,31 +22,9 @@
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
-            <!-- Navigation-->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div class="container px-5">
-                    <a class="navbar-brand" href="index.jsp">Boutique Eleganza</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.jsp">Inicio</a></li>
-                            <li class="nav-item"><a class="nav-link" href="productos.jsp">Productos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="sobre-nosotros.jsp">Sobre Nosotros</a></li>
-                            <li class="nav-item"><a class="nav-link" href="contacto.jsp">Contacto</a></li>
-                            <li class="nav-item"><a class="nav-link" href="carrito.jsp"><i class="bi bi-cart"></i> Carrito</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mi Cuenta</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
-                                    <li><a class="dropdown-item" href="login.jsp">Iniciar Sesión</a></li>
-                                    <li><a class="dropdown-item" href="registro.jsp">Registrarse</a></li>
-                                    <li><a class="dropdown-item active" href="perfil.jsp">Mi Perfil</a></li>
-                                    <li><a class="dropdown-item" href="admin.jsp">Administración</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+            <!-- Include Navigation -->
+            <jsp:include page="includes/navbar.jsp" />
+            
             <!-- Page content-->
             <section class="py-5">
                 <div class="container px-5">
@@ -62,8 +46,8 @@
                                     <div class="mb-3">
                                         <i class="bi bi-person-circle fs-1 text-primary"></i>
                                     </div>
-                                    <h5 class="fw-bolder">María García</h5>
-                                    <p class="text-muted mb-3">maria.garcia@email.com</p>
+                                    <h5 class="fw-bolder"><%= usuarioLogueado.getNombre() %></h5>
+                                    <p class="text-muted mb-3"><%= usuarioLogueado.getCorreo() %></p>
                                     <div class="d-grid gap-2">
                                         <button class="btn btn-outline-primary">
                                             <i class="bi bi-camera"></i> Cambiar Foto
@@ -83,45 +67,67 @@
                                     <h5 class="text-white mb-0">Información Personal</h5>
                                 </div>
                                 <div class="card-body p-4">
-                                    <form>
+                                    <!-- Mostrar mensaje de éxito -->
+                                    <% 
+                                    String success = (String) request.getAttribute("success");
+                                    if (success != null) { 
+                                    %>
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-check-circle"></i> <%= success %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <!-- Mostrar mensaje de error -->
+                                    <% 
+                                    String error = (String) request.getAttribute("error");
+                                    if (error != null) { 
+                                    %>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-exclamation-circle"></i> <%= error %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <form method="post" action="actualizarPerfil">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="nombre" class="form-label">Nombre completo *</label>
-                                                <input type="text" class="form-control" id="nombre" name="nombre" value="María García" required>
+                                                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= usuarioLogueado.getNombre() %>" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="correo" class="form-label">Correo electrónico *</label>
-                                                <input type="email" class="form-control" id="correo" name="correo" value="maria.garcia@email.com" required>
+                                                <input type="email" class="form-control" id="correo" name="correo" value="<%= usuarioLogueado.getCorreo() %>" required>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="telefono" class="form-label">Teléfono *</label>
-                                                <input type="tel" class="form-control" id="telefono" name="telefono" value="+57 300 123 4567" required>
+                                                <input type="tel" class="form-control" id="telefono" name="telefono" value="<%= usuarioLogueado.getTelefono() != null ? usuarioLogueado.getTelefono() : "" %>" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="pais" class="form-label">País *</label>
                                                 <select class="form-select" id="pais" name="pais" required>
-                                                    <option value="colombia" selected>Colombia</option>
-                                                    <option value="venezuela">Venezuela</option>
-                                                    <option value="ecuador">Ecuador</option>
-                                                    <option value="panama">Panamá</option>
+                                                    <option value="colombia" <%= "colombia".equals(usuarioLogueado.getPais()) ? "selected" : "" %>>Colombia</option>
+                                                    <option value="venezuela" <%= "venezuela".equals(usuarioLogueado.getPais()) ? "selected" : "" %>>Venezuela</option>
+                                                    <option value="ecuador" <%= "ecuador".equals(usuarioLogueado.getPais()) ? "selected" : "" %>>Ecuador</option>
+                                                    <option value="panama" <%= "panama".equals(usuarioLogueado.getPais()) ? "selected" : "" %>>Panamá</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="ciudad" class="form-label">Ciudad *</label>
-                                                <input type="text" class="form-control" id="ciudad" name="ciudad" value="Medellín" required>
+                                                <input type="text" class="form-control" id="ciudad" name="ciudad" value="<%= usuarioLogueado.getCiudad() != null ? usuarioLogueado.getCiudad() : "" %>" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="codigoPostal" class="form-label">Código Postal</label>
-                                                <input type="text" class="form-control" id="codigoPostal" name="codigoPostal" value="050001">
+                                                <input type="text" class="form-control" id="codigoPostal" name="codigoPostal" value="<%= usuarioLogueado.getCodigoPostal() != null ? usuarioLogueado.getCodigoPostal() : "" %>">
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="calle" class="form-label">Dirección (Calle) *</label>
-                                            <input type="text" class="form-control" id="calle" name="calle" value="Carrera 43A #16-15, El Poblado" required>
+                                            <input type="text" class="form-control" id="calle" name="calle" value="<%= usuarioLogueado.getCalle() != null ? usuarioLogueado.getCalle() : "" %>" required>
                                         </div>
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                             <button type="submit" class="btn btn-primary">

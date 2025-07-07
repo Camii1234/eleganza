@@ -67,20 +67,43 @@
                                         </div>
                                     <% } %>
                                     
-                                    <form>
+                                    <!-- Mostrar mensaje de logout exitoso -->
+                                    <% 
+                                    String logout = request.getParameter("logout");
+                                    if ("exitoso".equals(logout)) { 
+                                    %>
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-info-circle"></i> Has cerrado sesión exitosamente.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <!-- Mostrar mensaje de error -->
+                                    <% 
+                                    String error = (String) request.getAttribute("error");
+                                    String errorParam = request.getParameter("error");
+                                    
+                                    if (error != null) { 
+                                    %>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-exclamation-circle"></i> <%= error %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    <% } else if ("admin".equals(errorParam)) { %>
+                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <i class="bi bi-shield-exclamation"></i> Acceso denegado. Solo administradores pueden acceder a esta sección.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    <% } %>
+                                    
+                                    <form method="post" action="login">
                                         <div class="form-floating mb-3">
-                                            <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" required>
+                                            <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required>
                                             <label for="email">Correo electrónico</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input type="password" class="form-control" id="password" placeholder="Contraseña" required>
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
                                             <label for="password">Contraseña</label>
-                                        </div>
-                                        <div class="form-check mb-3">
-                                            <input class="form-check-input" type="checkbox" id="rememberMe">
-                                            <label class="form-check-label" for="rememberMe">
-                                                Recordar mi cuenta
-                                            </label>
                                         </div>
                                         <div class="d-grid mb-3">
                                             <button class="btn btn-primary btn-lg" type="submit">
