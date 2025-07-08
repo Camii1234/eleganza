@@ -19,6 +19,18 @@
             <!-- Include Navigation -->
             <jsp:include page="includes/navbar.jsp" />
             
+            <!-- Mostrar mensaje de perfil eliminado -->
+            <% 
+            String mensaje = request.getParameter("mensaje");
+            if ("perfil_eliminado".equals(mensaje)) { 
+            %>
+                <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+                    <i class="bi bi-check-circle"></i> 
+                    <strong>Perfil eliminado exitosamente.</strong> Lamentamos verte partir. Esperamos verte pronto nuevamente.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } %>
+            
             <!-- Header-->
             <header class="bg-dark py-5">
                 <div class="container px-5">

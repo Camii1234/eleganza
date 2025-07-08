@@ -316,36 +316,42 @@ public class UsuarioDAO {
     
     // Eliminar perfil del usuario (incluye verificación de dependencias)
     public boolean eliminarPerfil(int idUsuario) {
-        System.out.println("=== DEBUG eliminarPerfil ===");
-        System.out.println("Intentando eliminar usuario con ID: " + idUsuario);
-        
         try (Connection conn = ConexionBD.getConnection()) {
+            // Iniciar transacción
             conn.setAutoCommit(false);
             
             try {
-                // Simplificar: solo eliminar el usuario directamente
-                // Si hay restricciones de clave foránea, se pueden configurar con CASCADE en la BD
+                // Eliminar detalles de pedidos del usuario
+                String sqlDetalles = "DELETE pd FROM pedido_detalle pd INNER JOIN pedido p ON pd.idPedido = p.idPedido WHERE p.idUsuario = ?";
+                try (PreparedStatement psDetalles = conn.prepareStatement(sqlDetalles)) {
+                    psDetalles.setInt(1, idUsuario);
+                    psDetalles.executeUpdate();
+                }
+                
+                // Eliminar pedidos del usuario
+                String sqlPedidos = "DELETE FROM pedido WHERE idUsuario = ?";
+                try (PreparedStatement psPedidos = conn.prepareStatement(sqlPedidos)) {
+                    psPedidos.setInt(1, idUsuario);
+                    psPedidos.executeUpdate();
+                }
+                
+                // Eliminar el usuario
                 String sqlUsuario = "DELETE FROM usuario WHERE idUsuario = ?";
                 try (PreparedStatement psUsuario = conn.prepareStatement(sqlUsuario)) {
                     psUsuario.setInt(1, idUsuario);
                     int filasAfectadas = psUsuario.executeUpdate();
                     
-                    System.out.println("Filas afectadas: " + filasAfectadas);
-                    
                     if (filasAfectadas > 0) {
                         conn.commit();
-                        System.out.println("Usuario eliminado exitosamente");
                         return true;
                     }
                 }
                 
                 conn.rollback();
-                System.out.println("No se pudo eliminar el usuario - rollback");
                 return false;
                 
             } catch (SQLException e) {
                 conn.rollback();
-                System.err.println("Error en transacción: " + e.getMessage());
                 throw e;
             }
         } catch (SQLException e) {

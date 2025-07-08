@@ -3,6 +3,7 @@ com\camila\eleganza\servlet\EliminarProductoServlet.class
 com\camila\eleganza\dao\ConexionBD.class
 com\camila\eleganza\dao\UsuarioDAO.class
 com\camila\eleganza\servlet\ProductosServlet$ProductoDTO.class
+com\camila\eleganza\servlet\EliminarPerfilServlet.class
 com\camila\eleganza\filter\AuthenticationFilter.class
 com\camila\eleganza\servlet\ActualizarPerfilServlet.class
 com\camila\eleganza\servlet\AdminProductoServlet$ProductoDTO.class
@@ -17,6 +18,7 @@ com\camila\eleganza\servlet\EditarProductoServlet.class
 com\camila\eleganza\TestConexionBD.class
 com\camila\eleganza\model\Usuario.class
 com\camila\eleganza\servlet\LogoutServlet.class
+com\camila\eleganza\servlet\CambiarPasswordServlet.class
 com\camila\eleganza\dao\ProductoDAO.class
 com\camila\eleganza\model\Pedido.class
 com\camila\eleganza\model\PedidoDetalle.class

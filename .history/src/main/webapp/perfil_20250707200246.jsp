@@ -140,7 +140,7 @@
                                     <h5 class="text-dark mb-0">Cambiar Contraseña</h5>
                                 </div>
                                 <div class="card-body p-4">
-                                    <form method="post" action="cambiarPassword">
+                                    <form>
                                         <div class="mb-3">
                                             <label for="currentPassword" class="form-label">Contraseña actual *</label>
                                             <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
@@ -174,52 +174,6 @@
                 </div>
             </section>
         </main>
-        
-        <!-- Modal para confirmar eliminación de perfil -->
-        <div class="modal fade" id="eliminarPerfilModal" tabindex="-1" aria-labelledby="eliminarPerfilModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title text-white" id="eliminarPerfilModalLabel">
-                            <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminación de Perfil
-                        </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            <strong>¡Atención!</strong> Esta acción no se puede deshacer.
-                        </div>
-                        <p>Al eliminar tu perfil:</p>
-                        <ul>
-                            <li>Se eliminarán todos tus datos personales</li>
-                            <li>Se eliminarán todos tus pedidos e historial</li>
-                            <li>No podrás recuperar tu cuenta</li>
-                        </ul>
-                        <p><strong>¿Estás seguro de que deseas eliminar tu perfil permanentemente?</strong></p>
-                        
-                        <form method="post" action="eliminarPerfil" id="eliminarPerfilForm">
-                            <div class="mb-3">
-                                <label for="confirmacion" class="form-label">
-                                    Para confirmar, escribe <strong>ELIMINAR</strong> en el campo de abajo:
-                                </label>
-                                <input type="text" class="form-control" id="confirmacion" name="confirmacion" required 
-                                       placeholder="Escribe ELIMINAR para confirmar">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="bi bi-x-circle"></i> Cancelar
-                        </button>
-                        <button type="submit" form="eliminarPerfilForm" class="btn btn-danger">
-                            <i class="bi bi-trash"></i> Eliminar Perfil Permanentemente
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
         <!-- Footer-->
         <footer class="bg-dark py-4 mt-auto">
             <div class="container px-5">
@@ -239,78 +193,5 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-        
-        <!-- Scripts específicos para perfil -->
-        <script>
-            // Validación de contraseña en tiempo real
-            document.getElementById('newPassword').addEventListener('input', function() {
-                const password = this.value;
-                const confirmPassword = document.getElementById('confirmPassword');
-                
-                // Validar longitud
-                if (password.length < 8) {
-                    this.classList.add('is-invalid');
-                    this.classList.remove('is-valid');
-                } else {
-                    this.classList.remove('is-invalid');
-                    this.classList.add('is-valid');
-                }
-                
-                // Validar coincidencia con confirmación
-                if (confirmPassword.value && password !== confirmPassword.value) {
-                    confirmPassword.classList.add('is-invalid');
-                    confirmPassword.classList.remove('is-valid');
-                } else if (confirmPassword.value) {
-                    confirmPassword.classList.remove('is-invalid');
-                    confirmPassword.classList.add('is-valid');
-                }
-            });
-            
-            // Validación de confirmación de contraseña
-            document.getElementById('confirmPassword').addEventListener('input', function() {
-                const password = document.getElementById('newPassword').value;
-                const confirmPassword = this.value;
-                
-                if (password !== confirmPassword) {
-                    this.classList.add('is-invalid');
-                    this.classList.remove('is-valid');
-                } else {
-                    this.classList.remove('is-invalid');
-                    this.classList.add('is-valid');
-                }
-            });
-            
-            // Validación del modal de eliminación
-            document.getElementById('confirmacion').addEventListener('input', function() {
-                const confirmBtn = document.querySelector('#eliminarPerfilModal .btn-danger');
-                if (this.value === 'ELIMINAR') {
-                    confirmBtn.disabled = false;
-                    this.classList.remove('is-invalid');
-                    this.classList.add('is-valid');
-                } else {
-                    confirmBtn.disabled = true;
-                    this.classList.add('is-invalid');
-                    this.classList.remove('is-valid');
-                }
-            });
-            
-            // Inicializar el botón de eliminar como deshabilitado
-            document.addEventListener('DOMContentLoaded', function() {
-                const confirmBtn = document.querySelector('#eliminarPerfilModal .btn-danger');
-                if (confirmBtn) {
-                    confirmBtn.disabled = true;
-                }
-            });
-            
-            // Limpiar modal al cerrarse
-            document.getElementById('eliminarPerfilModal').addEventListener('hidden.bs.modal', function() {
-                document.getElementById('confirmacion').value = '';
-                document.getElementById('confirmacion').classList.remove('is-valid', 'is-invalid');
-                const confirmBtn = document.querySelector('#eliminarPerfilModal .btn-danger');
-                if (confirmBtn) {
-                    confirmBtn.disabled = true;
-                }
-            });
-        </script>
     </body>
 </html>

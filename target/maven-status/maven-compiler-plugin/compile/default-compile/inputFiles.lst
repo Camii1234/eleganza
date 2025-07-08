@@ -4,6 +4,7 @@ C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\AdminProductoServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\dao\PedidoDetalleDAO.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\Usuario.java
+C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\CambiarPasswordServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\EliminarUsuarioServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\RegistroServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\ObtenerProductoServlet.java
@@ -18,6 +19,7 @@ C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\PedidoDetalle.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\EliminarProductoServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\filter\AuthenticationFilter.java
+C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\EliminarPerfilServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\dao\ConexionBD.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\Pedido.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\ProductoServlet.java
