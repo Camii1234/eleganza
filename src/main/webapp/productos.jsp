@@ -57,6 +57,11 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <!-- Forzar fuente Playfair Display en toda la página -->
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            * { font-family: 'Playfair Display', serif !important; }
+        </style>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -64,11 +69,11 @@
             <jsp:include page="includes/navbar.jsp" />
             
             <!-- Header-->
-            <header class="bg-dark py-5">
+            <header class="py-5" style="background: linear-gradient(135deg, #fd6eb4 60%, #ffb4dc 100%) !important;">
                 <div class="container px-5 my-5">
-                    <div class="text-center text-white">
-                        <h1 class="display-4 fw-bolder">Nuestra Colección</h1>
-                        <p class="lead fw-normal text-white-50 mb-0">Descubre la moda femenina más exclusiva</p>
+                    <div class="text-center">
+                        <h1 class="display-4 fw-bolder" style="color:#fff; font-family: 'Playfair Display', serif;">Nuestra Colección</h1>
+                        <p class="lead fw-normal" style="color:#fff; opacity:0.8; font-family: 'Playfair Display', serif;">Descubre la moda femenina más exclusiva</p>
                     </div>
                 </div>
             </header>

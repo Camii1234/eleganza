@@ -31,7 +31,11 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <!-- Forzar fuente Playfair Display en toda la página -->
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
+            * { font-family: 'Playfair Display', serif !important; }
+            
             .alert.position-fixed {
                 top: 20px;
                 right: 20px;
