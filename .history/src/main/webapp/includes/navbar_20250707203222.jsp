@@ -42,12 +42,7 @@
                     <a class="nav-link <%= "/contacto.jsp".equals(currentPage) ? "active" : "" %>" href="contacto.jsp">Contacto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <%= "/carrito.jsp".equals(currentPage) ? "active" : "" %>" href="carrito.jsp">
-                        <i class="bi bi-cart"></i> Carrito
-                        <% if (cantidadCarrito > 0) { %>
-                            <span class="badge bg-primary rounded-pill ms-1"><%= cantidadCarrito %></span>
-                        <% } %>
-                    </a>
+                    <a class="nav-link" href="carrito.jsp"><i class="bi bi-cart"></i> Carrito</a>
                 </li>
                 <li class="nav-item dropdown">
                     <% if (isLoggedIn) { %>

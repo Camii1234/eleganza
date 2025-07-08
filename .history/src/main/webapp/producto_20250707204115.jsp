@@ -11,6 +11,7 @@
     String idParam = request.getParameter("id");
     Producto producto = null;
     String imagenBase64 = null;
+    List<String> tallasDisponibles = null;
     
     if (idParam != null && !idParam.trim().isEmpty()) {
         try {
@@ -23,6 +24,9 @@
                 if (producto.getImagen() != null && producto.getImagen().length > 0) {
                     imagenBase64 = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(producto.getImagen());
                 }
+                
+                // Obtener tallas disponibles
+                tallasDisponibles = productoDAO.getTallas();
             }
             
         } catch (NumberFormatException e) {
@@ -271,7 +275,14 @@
         <script>
             // Validación del formulario
             document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+                const talla = document.getElementById('size').value;
                 const cantidad = document.getElementById('quantity').value;
+                
+                if (!talla) {
+                    e.preventDefault();
+                    alert('Por favor selecciona una talla');
+                    return;
+                }
                 
                 if (!cantidad || cantidad < 1) {
                     e.preventDefault();

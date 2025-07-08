@@ -311,30 +311,25 @@
                 // Crear el elemento del mensaje
                 const messageDiv = document.createElement('div');
                 let alertClass = '';
-                let iconClass = '';
                 
                 switch(tipo) {
                     case 'success':
                         alertClass = 'alert-success';
-                        iconClass = 'bi-check-circle';
                         break;
                     case 'error':
                         alertClass = 'alert-danger';
-                        iconClass = 'bi-exclamation-triangle';
                         break;
                     case 'warning':
                         alertClass = 'alert-warning';
-                        iconClass = 'bi-exclamation-triangle';
                         break;
                     default:
                         alertClass = 'alert-info';
-                        iconClass = 'bi-info-circle';
                 }
                 
                 messageDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
                 messageDiv.style.cssText = 'top: 20px; right: 20px; z-index: 1055; min-width: 300px;';
                 messageDiv.innerHTML = 
-                    `<i class="bi ${iconClass} me-2"></i>` +
+                    `<i class="bi ${tipo === 'success' ? 'bi-check-circle' : tipo === 'error' ? 'bi-exclamation-triangle' : 'bi-info-circle'} me-2"></i>` +
                     mensaje +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
                 
@@ -356,19 +351,8 @@
                     btn.disabled = show;
                     if (show) {
                         btn.classList.add('disabled');
-                        // Agregar spinner si no existe
-                        if (!btn.querySelector('.loading-spinner')) {
-                            const spinner = document.createElement('span');
-                            spinner.className = 'loading-spinner';
-                            btn.insertBefore(spinner, btn.firstChild);
-                        }
                     } else {
                         btn.classList.remove('disabled');
-                        // Remover spinner si existe
-                        const spinner = btn.querySelector('.loading-spinner');
-                        if (spinner) {
-                            spinner.remove();
-                        }
                     }
                 });
             }

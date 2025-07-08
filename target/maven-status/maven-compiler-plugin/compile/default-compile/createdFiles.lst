@@ -21,6 +21,9 @@ com\camila\eleganza\servlet\LogoutServlet.class
 com\camila\eleganza\servlet\CambiarPasswordServlet.class
 com\camila\eleganza\dao\ProductoDAO.class
 com\camila\eleganza\model\Pedido.class
+com\camila\eleganza\model\ItemCarrito.class
+com\camila\eleganza\servlet\CarritoServlet.class
+com\camila\eleganza\model\Carrito.class
 com\camila\eleganza\model\PedidoDetalle.class
 com\camila\eleganza\servlet\AgregarProductoServlet.class
 com\camila\eleganza\HelloServlet.class

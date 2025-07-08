@@ -30,40 +30,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
-        <style>
-            .alert.position-fixed {
-                top: 20px;
-                right: 20px;
-                z-index: 1055;
-                min-width: 300px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
-            
-            .input-group-max-width {
-                max-width: 120px;
-            }
-            
-            .btn:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
-            
-            .loading-spinner {
-                border: 2px solid #f3f3f3;
-                border-top: 2px solid #3498db;
-                border-radius: 50%;
-                width: 16px;
-                height: 16px;
-                animation: spin 1s linear infinite;
-                display: inline-block;
-                margin-right: 5px;
-            }
-            
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        </style>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -306,80 +272,9 @@
         <script src="js/scripts.js"></script>
         
         <script>
-            // Función para mostrar mensajes temporales
-            function mostrarMensaje(mensaje, tipo = 'info') {
-                // Crear el elemento del mensaje
-                const messageDiv = document.createElement('div');
-                let alertClass = '';
-                let iconClass = '';
-                
-                switch(tipo) {
-                    case 'success':
-                        alertClass = 'alert-success';
-                        iconClass = 'bi-check-circle';
-                        break;
-                    case 'error':
-                        alertClass = 'alert-danger';
-                        iconClass = 'bi-exclamation-triangle';
-                        break;
-                    case 'warning':
-                        alertClass = 'alert-warning';
-                        iconClass = 'bi-exclamation-triangle';
-                        break;
-                    default:
-                        alertClass = 'alert-info';
-                        iconClass = 'bi-info-circle';
-                }
-                
-                messageDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-                messageDiv.style.cssText = 'top: 20px; right: 20px; z-index: 1055; min-width: 300px;';
-                messageDiv.innerHTML = 
-                    `<i class="bi ${iconClass} me-2"></i>` +
-                    mensaje +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-                
-                // Agregar al body
-                document.body.appendChild(messageDiv);
-                
-                // Eliminar automáticamente después de 5 segundos
-                setTimeout(() => {
-                    if (messageDiv.parentNode) {
-                        messageDiv.parentNode.removeChild(messageDiv);
-                    }
-                }, 5000);
-            }
-            
-            // Función para mostrar/ocultar indicador de carga
-            function toggleLoading(show) {
-                const buttons = document.querySelectorAll('.btn-increase, .btn-decrease, .btn-remove, #btn-vaciar-carrito');
-                buttons.forEach(btn => {
-                    btn.disabled = show;
-                    if (show) {
-                        btn.classList.add('disabled');
-                        // Agregar spinner si no existe
-                        if (!btn.querySelector('.loading-spinner')) {
-                            const spinner = document.createElement('span');
-                            spinner.className = 'loading-spinner';
-                            btn.insertBefore(spinner, btn.firstChild);
-                        }
-                    } else {
-                        btn.classList.remove('disabled');
-                        // Remover spinner si existe
-                        const spinner = btn.querySelector('.loading-spinner');
-                        if (spinner) {
-                            spinner.remove();
-                        }
-                    }
-                });
-            }
-            
             // Función para actualizar cantidad
             function actualizarCantidad(productoId, talla, nuevaCantidad) {
                 if (nuevaCantidad < 0) return;
-                
-                console.log(`Actualizando cantidad: ProductoId=${productoId}, Talla=${talla}, Cantidad=${nuevaCantidad}`);
-                
-                toggleLoading(true);
                 
                 const formData = new FormData();
                 formData.append('action', 'update');
@@ -394,26 +289,17 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Response data:', data);
                     if (data.success) {
                         location.reload();
                     } else {
-                        toggleLoading(false);
-                        mostrarMensaje(data.message || 'Error al actualizar la cantidad', 'error');
+                        alert('Error al actualizar la cantidad');
                     }
                 })
                 .catch(error => {
-                    toggleLoading(false);
                     console.error('Error:', error);
-                    mostrarMensaje('Error al actualizar la cantidad', 'error');
+                    alert('Error al actualizar la cantidad');
                 });
             }
             
@@ -422,10 +308,6 @@
                 if (!confirm('¿Estás seguro de que quieres eliminar este producto del carrito?')) {
                     return;
                 }
-                
-                console.log(`Eliminando producto: ProductoId=${productoId}, Talla=${talla}`);
-                
-                toggleLoading(true);
                 
                 const formData = new FormData();
                 formData.append('action', 'remove');
@@ -439,33 +321,25 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Response data:', data);
                     if (data.success) {
                         // Mostrar mensaje de éxito si está disponible
                         if (data.message) {
-                            mostrarMensaje(data.message, 'success');
+                            // Crear un toast o mensaje temporal
+                            mostrarMensaje('Producto eliminado del carrito', 'success');
                         }
                         // Recargar la página después de un breve delay
                         setTimeout(() => {
                             location.reload();
                         }, 1000);
                     } else {
-                        toggleLoading(false);
-                        mostrarMensaje(data.message || 'Error al eliminar el producto', 'error');
+                        alert(data.message || 'Error al eliminar el producto');
                     }
                 })
                 .catch(error => {
-                    toggleLoading(false);
                     console.error('Error:', error);
-                    mostrarMensaje('Error al eliminar el producto', 'error');
+                    alert('Error al eliminar el producto');
                 });
             }
             
@@ -474,10 +348,6 @@
                 if (!confirm('¿Estás seguro de que quieres vaciar todo el carrito?')) {
                     return;
                 }
-                
-                console.log('Vaciando carrito...');
-                
-                toggleLoading(true);
                 
                 const formData = new FormData();
                 formData.append('action', 'clear');
@@ -489,15 +359,8 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Response data:', data);
                     if (data.success) {
                         // Mostrar mensaje de éxito
                         mostrarMensaje(data.message || 'Carrito vaciado exitosamente', 'success');
@@ -506,14 +369,12 @@
                             location.reload();
                         }, 1000);
                     } else {
-                        toggleLoading(false);
-                        mostrarMensaje(data.message || 'Error al vaciar el carrito', 'error');
+                        alert(data.message || 'Error al vaciar el carrito');
                     }
                 })
                 .catch(error => {
-                    toggleLoading(false);
                     console.error('Error:', error);
-                    mostrarMensaje('Error al vaciar el carrito', 'error');
+                    alert('Error al vaciar el carrito');
                 });
             }
             
@@ -545,10 +406,7 @@
                         if (cantidadActual > 1) {
                             actualizarCantidad(productoId, talla, cantidadActual - 1);
                         } else {
-                            // Si la cantidad es 1, preguntar si quiere eliminar el producto
-                            if (confirm('¿Quieres eliminar este producto del carrito?')) {
-                                eliminarProducto(productoId, talla);
-                            }
+                            eliminarProducto(productoId, talla);
                         }
                     });
                 });

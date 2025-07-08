@@ -11,7 +11,6 @@
     String idParam = request.getParameter("id");
     Producto producto = null;
     String imagenBase64 = null;
-    List<String> tallasDisponibles = null;
     
     if (idParam != null && !idParam.trim().isEmpty()) {
         try {
@@ -24,9 +23,6 @@
                 if (producto.getImagen() != null && producto.getImagen().length > 0) {
                     imagenBase64 = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(producto.getImagen());
                 }
-                
-                // Obtener tallas disponibles
-                tallasDisponibles = productoDAO.getTallas();
             }
             
         } catch (NumberFormatException e) {
@@ -139,16 +135,7 @@
                                     <div class="me-3">
                                         <label for="size" class="form-label fw-bold">Talla:</label>
                                         <select class="form-select" id="size" name="talla" required style="width: auto; min-width: 120px;">
-                                            <option value="">Seleccionar talla</option>
-                                            <% if (tallasDisponibles != null && !tallasDisponibles.isEmpty()) { %>
-                                                <% for (String talla : tallasDisponibles) { %>
-                                                    <option value="<%= talla %>" <%= talla.equals(producto.getTalla()) ? "selected" : "" %>>
-                                                        <%= talla %>
-                                                    </option>
-                                                <% } %>
-                                            <% } else { %>
-                                                <option value="<%= producto.getTalla() %>"><%= producto.getTalla() %></option>
-                                            <% } %>
+                                            <option value="<%= producto.getTalla() %>" selected><%= producto.getTalla() %></option>
                                         </select>
                                     </div>
                                     <div>
@@ -185,10 +172,6 @@
                                             Sin Stock
                                         </button>
                                     <% } %>
-                                    <button class="btn btn-outline-secondary btn-lg flex-shrink-0" type="button">
-                                        <i class="bi bi-heart"></i>
-                                        Favorito
-                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -288,14 +271,7 @@
         <script>
             // Validación del formulario
             document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-                const talla = document.getElementById('size').value;
                 const cantidad = document.getElementById('quantity').value;
-                
-                if (!talla) {
-                    e.preventDefault();
-                    alert('Por favor selecciona una talla');
-                    return;
-                }
                 
                 if (!cantidad || cantidad < 1) {
                     e.preventDefault();
@@ -303,6 +279,34 @@
                     return;
                 }
             });
+            
+            // Mostrar mensaje si el producto fue agregado exitosamente
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('added') === 'true') {
+                // Crear y mostrar alerta de éxito
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                alert.style.top = '20px';
+                alert.style.right = '20px';
+                alert.style.zIndex = '9999';
+                alert.innerHTML = `
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    ¡Producto agregado al carrito exitosamente!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                // Eliminar el parámetro de la URL sin recargar la página
+                const newUrl = window.location.pathname + '?id=' + urlParams.get('id');
+                window.history.replaceState({}, '', newUrl);
+                
+                // Auto-cerrar después de 5 segundos
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
         </script>
     </body>
 </html>

@@ -1,11 +1,16 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="com.camila.eleganza.model.Usuario"%>
+<%@page import="com.camila.eleganza.model.Carrito"%>
 <%@page import="com.camila.eleganza.util.SessionManager"%>
 <%
     // Verificar si el usuario está logueado
     Usuario usuarioLogueado = SessionManager.getUsuarioSesion(session);
     boolean isLoggedIn = SessionManager.isUsuarioLogueado(session);
     boolean isAdmin = SessionManager.isAdmin(session);
+    
+    // Obtener el carrito de la sesión
+    Carrito carrito = (Carrito) session.getAttribute("carrito");
+    int cantidadCarrito = (carrito != null) ? carrito.getCantidadTotal() : 0;
     
     // Obtener la página actual para marcar como activa
     String currentPage = request.getRequestURI();
@@ -37,7 +42,12 @@
                     <a class="nav-link <%= "/contacto.jsp".equals(currentPage) ? "active" : "" %>" href="contacto.jsp">Contacto</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="carrito.jsp"><i class="bi bi-cart"></i> Carrito</a>
+                    <a class="nav-link <%= "/carrito.jsp".equals(currentPage) ? "active" : "" %>" href="carrito.jsp">
+                        <i class="bi bi-cart"></i> Carrito
+                        <% if (cantidadCarrito > 0) { %>
+                            <span class="badge bg-primary rounded-pill ms-1"><%= cantidadCarrito %></span>
+                        <% } %>
+                    </a>
                 </li>
                 <li class="nav-item dropdown">
                     <% if (isLoggedIn) { %>

@@ -271,7 +271,14 @@
         <script>
             // Validación del formulario
             document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+                const talla = document.getElementById('size').value;
                 const cantidad = document.getElementById('quantity').value;
+                
+                if (!talla) {
+                    e.preventDefault();
+                    alert('Por favor selecciona una talla');
+                    return;
+                }
                 
                 if (!cantidad || cantidad < 1) {
                     e.preventDefault();

@@ -3,6 +3,7 @@ C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\LogoutServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\AdminProductoServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\dao\PedidoDetalleDAO.java
+C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\CarritoServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\Usuario.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\CambiarPasswordServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\EliminarUsuarioServlet.java
@@ -16,6 +17,8 @@ C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\util\SessionManager.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\EditarProductoServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\UsuarioServlet.java
+C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\Carrito.java
+C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\ItemCarrito.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\model\PedidoDetalle.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\servlet\EliminarProductoServlet.java
 C:\Users\ASUS\Documents\Proyectosweb\proyectotecnicas-boutique\eleganza\src\main\java\com\camila\eleganza\filter\AuthenticationFilter.java
