@@ -7,8 +7,9 @@
 <%@page import="java.util.Locale"%>
 
 <%
-    // Obtener el carrito de la sesión
+    // Obtener el carrito de la sesión (ya creado por CarritoFilter)
     Carrito carrito = (Carrito) session.getAttribute("carrito");
+    // El filtro ya garantiza que existe, pero por seguridad:
     if (carrito == null) {
         carrito = new Carrito();
         session.setAttribute("carrito", carrito);
@@ -48,50 +49,90 @@
                 cursor: not-allowed;
             }
             
-            .loading-spinner {
-                border: 2px solid #f3f3f3;
-                border-top: 2px solid #3498db;
-                border-radius: 50%;
-                width: 16px;
-                height: 16px;
-                animation: spin 1s linear infinite;
-                display: inline-block;
-                margin-right: 5px;
+            .cantidad-input {
+                font-weight: bold;
+                color: #495057;
             }
             
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
+            .btn-increase, .btn-decrease {
+                min-width: 35px;
+                font-weight: bold;
             }
+            
+            .btn-remove {
+                min-width: 35px;
+            }
+            
+            .spinner-border-sm {
+                width: 1rem;
+                height: 1rem;
+            }
+            
+            .cart-item {
+                transition: all 0.3s ease;
+            }
+            
+            .cart-item:hover {
+                background-color: #f8f9fa;
+            }
+            
+            .loading-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            }
+            
+            .loading-spinner {
+                color: white;
+                font-size: 2rem;
+            }
+            
         </style>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
             <!-- Navigation-->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div class="container px-5">
-                    <a class="navbar-brand" href="index.jsp">Boutique Eleganza</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item"><a class="nav-link" href="index.jsp">Inicio</a></li>
-                            <li class="nav-item"><a class="nav-link" href="productos.jsp">Productos</a></li>
-                            <li class="nav-item"><a class="nav-link" href="sobre-nosotros.jsp">Sobre Nosotros</a></li>
-                            <li class="nav-item"><a class="nav-link" href="contacto.jsp">Contacto</a></li>
-                            <li class="nav-item"><a class="nav-link active" href="carrito.jsp"><i class="bi bi-cart"></i> Carrito</a></li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdownUser" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mi Cuenta</a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
-                                    <li><a class="dropdown-item" href="login.jsp">Iniciar Sesión</a></li>
-                                    <li><a class="dropdown-item" href="registro.jsp">Registrarse</a></li>
-                                    <li><a class="dropdown-item" href="perfil.jsp">Mi Perfil</a></li>
-                                    <li><a class="dropdown-item" href="admin.jsp">Administración</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+            <%@ include file="includes/navbar.jsp" %>
+            
+            <!-- Mensajes de error y éxito -->
+            <% 
+            String error = request.getParameter("error");
+            String success = request.getParameter("success");
+            
+            if (error != null) { 
+            %>
+                <div class="alert alert-danger alert-dismissible fade show position-fixed" role="alert" style="top: 20px; right: 20px; z-index: 1055; min-width: 300px;">
+                    <i class="bi bi-exclamation-circle"></i>
+                    <% if ("carrito-vacio".equals(error)) { %>
+                        El carrito está vacío. Agrega productos antes de proceder al pago.
+                    <% } else if ("pdf-generation".equals(error)) { %>
+                        Error al generar la factura PDF. Intenta nuevamente.
+                    <% } else if ("sesion".equals(error)) { %>
+                        Debes iniciar sesión para proceder al pago.
+                    <% } else { %>
+                        Ha ocurrido un error inesperado.
+                    <% } %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            </nav>
+            <% } %>
+            
+            <% if (success != null) { %>
+                <div class="alert alert-success alert-dismissible fade show position-fixed" role="alert" style="top: 20px; right: 20px; z-index: 1055; min-width: 300px;">
+                    <i class="bi bi-check-circle"></i>
+                    <% if ("factura-generada".equals(success)) { %>
+                        Factura generada exitosamente. El archivo se está descargando.
+                    <% } %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <% } %>
+            
             <!-- Page content-->
             <section class="py-5">
                 <div class="container px-5">
@@ -153,7 +194,7 @@
                                                 "https://dummyimage.com/150x150/ced4da/6c757d?text=" + item.getNombre().replace(" ", "+");
                                         %>
                                         <!-- Cart item -->
-                                        <div class="<%= i < items.size() - 1 ? "border-bottom" : "" %> p-4">
+                                        <div class="cart-item <%= i < items.size() - 1 ? "border-bottom" : "" %> p-4" data-producto-id="<%= item.getIdProducto() %>" data-talla="<%= item.getTalla() %>">
                                             <div class="row align-items-center">
                                                 <div class="col-md-3">
                                                     <img src="<%= imagenSrc %>" alt="<%= item.getNombre() %>" class="img-fluid rounded">
@@ -179,7 +220,8 @@
                                                                    value="<%= item.getCantidad() %>" readonly 
                                                                    title="Cantidad de <%= item.getNombre() %>" 
                                                                    placeholder="Cantidad"
-                                                                   id="cantidad-<%= item.getIdProducto() %>-<%= item.getTalla() %>">
+                                                                   id="cantidad-<%= item.getIdProducto() %>-<%= item.getTalla() %>"
+                                                                   aria-label="Cantidad">
                                                             <button class="btn btn-outline-secondary btn-increase" type="button"
                                                                     data-producto-id="<%= item.getIdProducto() %>" 
                                                                     data-talla="<%= item.getTalla() %>" 
@@ -218,8 +260,8 @@
                                     </div>
                                     <div class="card-body p-4">
                                         <div class="d-flex justify-content-between mb-2">
-                                            <span>Subtotal (<%= carrito.getCantidadTotal() %> productos):</span>
-                                            <span><%= String.format("$%,.0f", carrito.getSubtotal()) %></span>
+                                            <span>Subtotal (<span class="cantidad-productos"><%= carrito.getCantidadTotal() %></span> productos):</span>
+                                            <span class="subtotal-amount"><%= String.format("$%,.0f", carrito.getSubtotal()) %></span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Envío:</span>
@@ -228,13 +270,19 @@
                                         <% if (carrito.getDescuento() > 0) { %>
                                         <div class="d-flex justify-content-between mb-2">
                                             <span>Descuento:</span>
-                                            <span class="text-success">-<%= String.format("$%,.0f", carrito.getDescuento()) %></span>
+                                            <span class="text-success descuento-amount">-<%= String.format("$%,.0f", carrito.getDescuento()) %></span>
+                                        </div>
+                                        <% } %>
+                                        <% if (carrito.getImpuestos() > 0) { %>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>IVA (19%):</span>
+                                            <span class="impuestos-amount"><%= String.format("$%,.0f", carrito.getImpuestos()) %></span>
                                         </div>
                                         <% } %>
                                         <hr>
                                         <div class="d-flex justify-content-between mb-4">
                                             <strong>Total:</strong>
-                                            <strong class="text-primary"><%= String.format("$%,.0f", carrito.getTotal()) %></strong>
+                                            <strong class="text-primary total-amount"><%= String.format("$%,.0f", carrito.getTotal()) %></strong>
                                         </div>
                                         <div class="mb-3">
                                             <label for="coupon" class="form-label">Código de descuento</label>
@@ -244,9 +292,14 @@
                                             </div>
                                         </div>
                                         <div class="d-grid">
-                                            <button class="btn btn-primary btn-lg">
-                                                <i class="bi bi-credit-card"></i> Proceder al Pago
-                                            </button>
+                                            <form action="generar-factura-pdf" method="post" style="display: inline;" onsubmit="return confirmarPago();">
+                                                <button type="submit" class="btn btn-primary btn-lg" id="btn-proceder-pago">
+                                                    <i class="bi bi-file-earmark-pdf"></i> Generar Factura PDF
+                                                </button>
+                                            </form>
+                                            <small class="text-muted mt-2 text-center">
+                                                <i class="bi bi-info-circle"></i> Se generará una factura PDF con todos los detalles de tu compra
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -306,268 +359,21 @@
         <script src="js/scripts.js"></script>
         
         <script>
-            // Función para mostrar mensajes temporales
-            function mostrarMensaje(mensaje, tipo = 'info') {
-                // Crear el elemento del mensaje
-                const messageDiv = document.createElement('div');
-                let alertClass = '';
-                let iconClass = '';
+            function confirmarPago() {
+                const nombre = '<%= session.getAttribute("usuarioNombre") != null ? session.getAttribute("usuarioNombre") : "Usuario" %>';
+                const total = '<%= String.format("$%,.0f", carrito.getTotal()) %>';
                 
-                switch(tipo) {
-                    case 'success':
-                        alertClass = 'alert-success';
-                        iconClass = 'bi-check-circle';
-                        break;
-                    case 'error':
-                        alertClass = 'alert-danger';
-                        iconClass = 'bi-exclamation-triangle';
-                        break;
-                    case 'warning':
-                        alertClass = 'alert-warning';
-                        iconClass = 'bi-exclamation-triangle';
-                        break;
-                    default:
-                        alertClass = 'alert-info';
-                        iconClass = 'bi-info-circle';
-                }
-                
-                messageDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-                messageDiv.style.cssText = 'top: 20px; right: 20px; z-index: 1055; min-width: 300px;';
-                messageDiv.innerHTML = 
-                    `<i class="bi ${iconClass} me-2"></i>` +
-                    mensaje +
-                    '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-                
-                // Agregar al body
-                document.body.appendChild(messageDiv);
-                
-                // Eliminar automáticamente después de 5 segundos
-                setTimeout(() => {
-                    if (messageDiv.parentNode) {
-                        messageDiv.parentNode.removeChild(messageDiv);
-                    }
-                }, 5000);
+                return confirm(`¡Hola ${nombre}!\n\n¿Confirmas que deseas generar la factura por un total de ${total}?\n\nSe descargará un archivo PDF con todos los detalles de tu compra.`);
             }
             
-            // Función para mostrar/ocultar indicador de carga
-            function toggleLoading(show) {
-                const buttons = document.querySelectorAll('.btn-increase, .btn-decrease, .btn-remove, #btn-vaciar-carrito');
-                buttons.forEach(btn => {
-                    btn.disabled = show;
-                    if (show) {
-                        btn.classList.add('disabled');
-                        // Agregar spinner si no existe
-                        if (!btn.querySelector('.loading-spinner')) {
-                            const spinner = document.createElement('span');
-                            spinner.className = 'loading-spinner';
-                            btn.insertBefore(spinner, btn.firstChild);
-                        }
-                    } else {
-                        btn.classList.remove('disabled');
-                        // Remover spinner si existe
-                        const spinner = btn.querySelector('.loading-spinner');
-                        if (spinner) {
-                            spinner.remove();
-                        }
-                    }
+            // Auto-cerrar alertas después de 5 segundos
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
                 });
-            }
-            
-            // Función para actualizar cantidad
-            function actualizarCantidad(productoId, talla, nuevaCantidad) {
-                if (nuevaCantidad < 0) return;
-                
-                console.log(`Actualizando cantidad: ProductoId=${productoId}, Talla=${talla}, Cantidad=${nuevaCantidad}`);
-                
-                toggleLoading(true);
-                
-                const formData = new FormData();
-                formData.append('action', 'update');
-                formData.append('productoId', productoId);
-                formData.append('talla', talla);
-                formData.append('cantidad', nuevaCantidad);
-                
-                fetch('carrito', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response data:', data);
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        toggleLoading(false);
-                        mostrarMensaje(data.message || 'Error al actualizar la cantidad', 'error');
-                    }
-                })
-                .catch(error => {
-                    toggleLoading(false);
-                    console.error('Error:', error);
-                    mostrarMensaje('Error al actualizar la cantidad', 'error');
-                });
-            }
-            
-            // Función para eliminar producto
-            function eliminarProducto(productoId, talla) {
-                if (!confirm('¿Estás seguro de que quieres eliminar este producto del carrito?')) {
-                    return;
-                }
-                
-                console.log(`Eliminando producto: ProductoId=${productoId}, Talla=${talla}`);
-                
-                toggleLoading(true);
-                
-                const formData = new FormData();
-                formData.append('action', 'remove');
-                formData.append('productoId', productoId);
-                formData.append('talla', talla);
-                
-                fetch('carrito', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response data:', data);
-                    if (data.success) {
-                        // Mostrar mensaje de éxito si está disponible
-                        if (data.message) {
-                            mostrarMensaje(data.message, 'success');
-                        }
-                        // Recargar la página después de un breve delay
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        toggleLoading(false);
-                        mostrarMensaje(data.message || 'Error al eliminar el producto', 'error');
-                    }
-                })
-                .catch(error => {
-                    toggleLoading(false);
-                    console.error('Error:', error);
-                    mostrarMensaje('Error al eliminar el producto', 'error');
-                });
-            }
-            
-            // Función para vaciar carrito
-            function vaciarCarrito() {
-                if (!confirm('¿Estás seguro de que quieres vaciar todo el carrito?')) {
-                    return;
-                }
-                
-                console.log('Vaciando carrito...');
-                
-                toggleLoading(true);
-                
-                const formData = new FormData();
-                formData.append('action', 'clear');
-                
-                fetch('carrito', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response data:', data);
-                    if (data.success) {
-                        // Mostrar mensaje de éxito
-                        mostrarMensaje(data.message || 'Carrito vaciado exitosamente', 'success');
-                        // Recargar la página después de un breve delay
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        toggleLoading(false);
-                        mostrarMensaje(data.message || 'Error al vaciar el carrito', 'error');
-                    }
-                })
-                .catch(error => {
-                    toggleLoading(false);
-                    console.error('Error:', error);
-                    mostrarMensaje('Error al vaciar el carrito', 'error');
-                });
-            }
-            
-            // Event listeners
-            document.addEventListener('DOMContentLoaded', function() {
-                // Botones de aumentar cantidad
-                document.querySelectorAll('.btn-increase').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productoId = this.dataset.productoId;
-                        const talla = this.dataset.talla;
-                        const cantidadActual = parseInt(this.dataset.cantidad);
-                        const stock = parseInt(this.dataset.stock);
-                        
-                        if (cantidadActual < stock) {
-                            actualizarCantidad(productoId, talla, cantidadActual + 1);
-                        } else {
-                            alert('No hay más stock disponible');
-                        }
-                    });
-                });
-                
-                // Botones de disminuir cantidad
-                document.querySelectorAll('.btn-decrease').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productoId = this.dataset.productoId;
-                        const talla = this.dataset.talla;
-                        const cantidadActual = parseInt(this.dataset.cantidad);
-                        
-                        if (cantidadActual > 1) {
-                            actualizarCantidad(productoId, talla, cantidadActual - 1);
-                        } else {
-                            // Si la cantidad es 1, preguntar si quiere eliminar el producto
-                            if (confirm('¿Quieres eliminar este producto del carrito?')) {
-                                eliminarProducto(productoId, talla);
-                            }
-                        }
-                    });
-                });
-                
-                // Botones de eliminar
-                document.querySelectorAll('.btn-remove').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productoId = this.dataset.productoId;
-                        const talla = this.dataset.talla;
-                        eliminarProducto(productoId, talla);
-                    });
-                });
-                
-                // Botón de vaciar carrito
-                const btnVaciarCarrito = document.getElementById('btn-vaciar-carrito');
-                if (btnVaciarCarrito) {
-                    btnVaciarCarrito.addEventListener('click', vaciarCarrito);
-                }
-            });
+            }, 5000);
         </script>
     </body>
 </html>

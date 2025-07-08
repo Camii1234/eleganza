@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Demo - Agregar al Carrito</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Demo - Agregar Productos al Carrito</h2>
+        
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://dummyimage.com/300x200/ced4da/6c757d?text=Blusa+Elegante" class="card-img-top" alt="Blusa Elegante">
+                    <div class="card-body">
+                        <h5 class="card-title">Blusa Elegante</h5>
+                        <p class="card-text">Hermosa blusa para ocasiones especiales</p>
+                        <p class="fw-bold text-primary">$85,000</p>
+                        
+                        <div class="mb-3">
+                            <label for="talla1" class="form-label">Talla:</label>
+                            <select class="form-select" id="talla1">
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cantidad1" class="form-label">Cantidad:</label>
+                            <input type="number" class="form-control" id="cantidad1" value="1" min="1" max="10">
+                        </div>
+                        
+                        <button class="btn btn-primary w-100" onclick="agregarProducto1()">
+                            <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://dummyimage.com/300x200/ced4da/6c757d?text=Vestido+Arena" class="card-img-top" alt="Vestido Arena">
+                    <div class="card-body">
+                        <h5 class="card-title">Vestido Arena</h5>
+                        <p class="card-text">Vestido casual para el día a día</p>
+                        <p class="fw-bold text-primary">$120,000</p>
+                        
+                        <div class="mb-3">
+                            <label for="talla2" class="form-label">Talla:</label>
+                            <select class="form-select" id="talla2">
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="cantidad2" class="form-label">Cantidad:</label>
+                            <input type="number" class="form-control" id="cantidad2" value="1" min="1" max="10">
+                        </div>
+                        
+                        <button class="btn btn-primary w-100" onclick="agregarProducto2()">
+                            <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Estado del Carrito</h5>
+                        <p>Productos en carrito: <span id="contador-carrito" class="badge bg-primary">0</span></p>
+                        <p>Total: <span id="total-carrito" class="fw-bold text-success">$15,000</span></p>
+                        <a href="carrito.html" class="btn btn-success">
+                            <i class="bi bi-cart"></i> Ver Carrito
+                        </a>
+                        <button class="btn btn-outline-danger mt-2" onclick="limpiarCarrito()">
+                            <i class="bi bi-trash"></i> Limpiar Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/scripts.js"></script>
+    
+    <script>
+        function agregarProducto1() {
+            const talla = document.getElementById('talla1').value;
+            const cantidad = parseInt(document.getElementById('cantidad1').value);
+            
+            const producto = {
+                idProducto: 1,
+                nombre: 'Blusa Elegante',
+                precio: 85000,
+                talla: talla,
+                categoria: 'Blusas',
+                cantidad: cantidad,
+                stock: 10,
+                descripcion: 'Hermosa blusa para ocasiones especiales'
+            };
+            
+            agregarAlCarrito(producto);
+            actualizarEstadoCarrito();
+        }
+        
+        function agregarProducto2() {
+            const talla = document.getElementById('talla2').value;
+            const cantidad = parseInt(document.getElementById('cantidad2').value);
+            
+            const producto = {
+                idProducto: 2,
+                nombre: 'Vestido Arena',
+                precio: 120000,
+                talla: talla,
+                categoria: 'Vestidos',
+                cantidad: cantidad,
+                stock: 5,
+                descripcion: 'Vestido casual para el día a día'
+            };
+            
+            agregarAlCarrito(producto);
+            actualizarEstadoCarrito();
+        }
+        
+        function limpiarCarrito() {
+            limpiarCarritoAlCerrarSesion();
+            actualizarEstadoCarrito();
+            mostrarMensaje('Carrito limpiado', 'success');
+        }
+        
+        function actualizarEstadoCarrito() {
+            cargarCarritoDesdeStorage();
+            const cantidadTotal = carritoLocal.items.reduce((sum, item) => sum + item.cantidad, 0);
+            
+            document.getElementById('contador-carrito').textContent = cantidadTotal;
+            document.getElementById('total-carrito').textContent = `$${carritoLocal.total.toLocaleString()}`;
+        }
+        
+        // Actualizar estado al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarCarritoDesdeStorage();
+            actualizarEstadoCarrito();
+        });
+    </script>
+</body>
+</html>

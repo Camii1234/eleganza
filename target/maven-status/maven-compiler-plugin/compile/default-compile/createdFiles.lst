@@ -1,5 +1,6 @@
 com\camila\eleganza\model\Producto.class
 com\camila\eleganza\servlet\EliminarProductoServlet.class
+com\camila\eleganza\service\FacturaPDFService.class
 com\camila\eleganza\dao\ConexionBD.class
 com\camila\eleganza\dao\UsuarioDAO.class
 com\camila\eleganza\servlet\ProductosServlet$ProductoDTO.class
@@ -16,6 +17,7 @@ com\camila\eleganza\servlet\ObtenerProductoServlet.class
 com\camila\eleganza\servlet\ProductoServlet.class
 com\camila\eleganza\servlet\EditarProductoServlet.class
 com\camila\eleganza\TestConexionBD.class
+com\camila\eleganza\filter\CarritoFilter.class
 com\camila\eleganza\model\Usuario.class
 com\camila\eleganza\servlet\LogoutServlet.class
 com\camila\eleganza\servlet\CambiarPasswordServlet.class
@@ -26,7 +28,9 @@ com\camila\eleganza\servlet\CarritoServlet.class
 com\camila\eleganza\model\Carrito.class
 com\camila\eleganza\model\PedidoDetalle.class
 com\camila\eleganza\servlet\AgregarProductoServlet.class
+com\camila\eleganza\model\Factura.class
 com\camila\eleganza\HelloServlet.class
+com\camila\eleganza\servlet\GenerarFacturaPDFServlet.class
 com\camila\eleganza\servlet\UsuarioServlet.class
 com\camila\eleganza\servlet\UsuarioServlet$UsuarioDTO.class
 com\camila\eleganza\servlet\ProductosServlet.class

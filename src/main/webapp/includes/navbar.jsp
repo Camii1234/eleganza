@@ -8,9 +8,9 @@
     boolean isLoggedIn = SessionManager.isUsuarioLogueado(session);
     boolean isAdmin = SessionManager.isAdmin(session);
     
-    // Obtener el carrito de la sesión
-    Carrito carrito = (Carrito) session.getAttribute("carrito");
-    int cantidadCarrito = (carrito != null) ? carrito.getCantidadTotal() : 0;
+    // Obtener el carrito de la sesión (ya creado por CarritoFilter)
+    Carrito carritoSesion = (Carrito) session.getAttribute("carrito");
+    int cantidadCarrito = (carritoSesion != null) ? carritoSesion.getCantidadTotal() : 0;
     
     // Obtener la página actual para marcar como activa
     String currentPage = request.getRequestURI();
