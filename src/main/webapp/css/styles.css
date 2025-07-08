@@ -1,4 +1,23 @@
 @charset "UTF-8";
+
+/* Botón rosa personalizado */
+.btn-pink {
+  color: #fff !important;
+  background-color: #fd6eb4 !important; /* Rosa brillante */
+  border-color: #fd6eb4 !important;
+  font-family: 'Playfair Display', serif !important;
+  transition: background 0.2s, border 0.2s, color 0.2s;
+}
+.btn-pink:hover, .btn-pink:focus {
+  background-color: #f078c8 !important; /* Rosa medio */
+  border-color: #f078c8 !important;
+  color: #fff !important;
+}
+.btn-pink:active, .btn-pink.active {
+  background-color: #ffb4dc !important; /* Rosa pastel */
+  border-color: #ffb4dc !important;
+  color: #fff !important;
+}
 /*!
 * Start Bootstrap - Modern Business v5.0.7 (https://startbootstrap.com/template-overviews/modern-business)
 * Copyright 2013-2023 Start Bootstrap

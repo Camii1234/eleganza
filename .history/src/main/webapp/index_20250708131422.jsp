@@ -45,7 +45,7 @@
                                 <h1 class="display-5 fw-bolder text-white mb-2">Boutique Eleganza</h1>
                                 <p class="lead fw-normal text-white-50 mb-4">Descubre la moda femenina más exclusiva y elegante en el corazón de Medellín, Antioquia. Ropa única para mujeres que valoran el estilo y la calidad.</p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a class="btn btn-pink btn-lg px-4 me-sm-3" href="productos.jsp" style="background-color:#fd6eb4 !important; color:#fff !important; border-color:#fd6eb4 !important; font-family:'Playfair Display',serif !important;">Ver Productos</a>
+                                    <a class="btn btn-pink btn-lg px-4 me-sm-3" href="productos.jsp">Ver Productos</a>
                                     <a class="btn btn-outline-light btn-lg px-4" href="sobre-nosotros.jsp">Conoce Más</a>
                                 </div>
                             </div>
